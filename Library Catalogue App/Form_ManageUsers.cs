@@ -91,14 +91,24 @@ namespace Library_Catalogue_App
         }
         private void dgv_userlist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0)
             {
-                selectedId = Convert.ToInt32(dgv_userlist.Rows[e.RowIndex].Cells["id_users"].Value);
-                txtbox_username.Text = dgv_userlist.Rows[e.RowIndex].Cells["Username"].Value.ToString();
-                txtbox_pass.Text = dgv_userlist.Rows[e.RowIndex].Cells["Password"].Value.ToString();
-                comb_role.Text = dgv_userlist.Rows[e.RowIndex].Cells["Role"].Value.ToString();
-
+                return;
             }
+            DataGridViewRow row = dgv_userlist.Rows[e.RowIndex];
+            object idValue = row.Cells["id_users"].Value;
+
+            if (idValue == null || idValue == DBNull.Value || string.IsNullOrWhiteSpace(idValue.ToString()))
+            {
+                MessageBox.Show("This user does not have a valid ID. Cannot continue.");
+                selectedId = 0;
+                return;
+            }
+            selectedId = Convert.ToInt32(dgv_userlist.Rows[e.RowIndex].Cells["id_users"].Value);
+            txtbox_username.Text = dgv_userlist.Rows[e.RowIndex].Cells["Username"].Value.ToString();
+            txtbox_pass.Text = dgv_userlist.Rows[e.RowIndex].Cells["Password"].Value.ToString();
+            comb_role.Text = dgv_userlist.Rows[e.RowIndex].Cells["Role"].Value.ToString();
+
         }
         private void btn_add_Click(object sender, EventArgs e)
         {

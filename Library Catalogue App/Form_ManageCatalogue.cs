@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,7 +48,7 @@ namespace Library_Catalogue_App
                 conn.Open();
 
                 connectionstring = "server=localhost;user=root;database=db_LibraryCatalogueApp;password=;";
-                sqlquery = "select id_books, booktitle as 'Title' , bookauthors as 'Author', bookyear as 'Year', book_qty as 'Quantity' FROM `Books` where status_del = 'F'";
+                sqlquery = "select id_books, booktitle as 'Title' , bookauthors as 'Author', bookyear as 'Year' FROM `Books` where status_del = 'F'";
                 cmd = new MySqlCommand(sqlquery, conn);
 
                 adapter = new MySqlDataAdapter(cmd);
@@ -80,7 +81,7 @@ namespace Library_Catalogue_App
         private void btn_add_Click(object sender, EventArgs e)
         {
             if (txtbox_title.Text == "" || txtbox_author.Text == "" ||
-                txtbox_year.Text == "" || txtbox_qty.Text == "")
+                txtbox_year.Text == "")
             {
                 MessageBox.Show("Please fill all textboxes");
                 return;
@@ -105,11 +106,10 @@ namespace Library_Catalogue_App
                 conn.Open();
 
                 sqlquery =
-                    "insert into `Books` (booktitle, bookauthors, bookyear, book_qty) values ('" +
+                    "insert into `Books` (booktitle, bookauthors, bookyear) values ('" +
                     txtbox_title.Text + "', '" +
                     txtbox_author.Text + "', '" +
-                    txtbox_year.Text + "', '" +
-                    txtbox_qty.Text + "')";
+                    txtbox_year.Text + "')";
 
                 cmd = new MySqlCommand(sqlquery, conn);
                 cmd.ExecuteNonQuery();
@@ -132,33 +132,44 @@ namespace Library_Catalogue_App
             txtbox_title.ResetText();
             txtbox_author.ResetText();
             txtbox_year.ResetText();
-            txtbox_qty.ResetText();
             GetDataFromSQL();
         }
 
         private void dgv_booklist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0)
             {
-                selectedid = Convert.ToInt32(dgv_booklist.Rows[e.RowIndex].Cells["id_books"].Value);
-                txtbox_title.Text = dgv_booklist.Rows[e.RowIndex].Cells["Title"].Value.ToString();
-                txtbox_author.Text = dgv_booklist.Rows[e.RowIndex].Cells["Author"].Value.ToString();
-                txtbox_year.Text = dgv_booklist.Rows[e.RowIndex].Cells["Year"].Value.ToString();
-                txtbox_qty.Text = dgv_booklist.Rows[e.RowIndex].Cells["Quantity"].Value.ToString();
+                return;
             }
+            DataGridViewRow row = dgv_booklist.Rows[e.RowIndex];
+            object idValue = row.Cells["id_books"].Value;
+
+            if (idValue == null || idValue == DBNull.Value || string.IsNullOrWhiteSpace(idValue.ToString()))
+            {
+                MessageBox.Show("This book does not have a valid ID. Cannot continue.");
+                selectedid = 0;
+                return;
+            }
+
+            selectedid = Convert.ToInt32(dgv_booklist.Rows[e.RowIndex].Cells["id_books"].Value);
+            txtbox_title.Text = dgv_booklist.Rows[e.RowIndex].Cells["Title"].Value.ToString();
+            txtbox_author.Text = dgv_booklist.Rows[e.RowIndex].Cells["Author"].Value.ToString();
+            txtbox_year.Text = dgv_booklist.Rows[e.RowIndex].Cells["Year"].Value.ToString();
         }
+
 
         private void btn_update_Click(object sender, EventArgs e)
         {
             try
             {
-                    if (selectedid == -1)
+                conn.Close();
+                if (selectedid == -1)
                     {
                         MessageBox.Show("Please select a user to update!");
                         return;
                     }
 
-                    if (txtbox_title.Text == "" || txtbox_author.Text == "" || txtbox_year.Text == "" || txtbox_qty.Text == "")
+                    if (txtbox_title.Text == "" || txtbox_author.Text == "" || txtbox_year.Text == "")
                     {
                         MessageBox.Show("Please fill all textboxes!");
                         return;
@@ -170,8 +181,7 @@ namespace Library_Catalogue_App
                 string sqlquery = "update `Books` set " +
                                   "booktitle = '" + txtbox_title.Text + "', " +
                                   "bookauthors = '" + txtbox_author.Text + "', " +
-                                  "bookyear = '" + txtbox_year.Text + "', " +
-                                  "book_qty = '" + txtbox_qty.Text + "' " +
+                                  "bookyear = '" + txtbox_year.Text + "' " +
                                   "where id_books = " + selectedid;
 
                 cmd = new MySqlCommand(sqlquery, conn);
@@ -195,11 +205,11 @@ namespace Library_Catalogue_App
             {
                 if (selectedid == -1)
                 {
-                    MessageBox.Show("Please select a user to update!");
+                    MessageBox.Show("Please select a user to delete!");
                     return;
                 }
 
-                if (txtbox_title.Text == "" || txtbox_author.Text == "" || txtbox_year.Text == "" || txtbox_qty.Text == "")
+                if (txtbox_title.Text == "" || txtbox_author.Text == "" || txtbox_year.Text == "")
                 {
                     MessageBox.Show("Please fill all textboxes!");
                     return;
@@ -241,10 +251,6 @@ namespace Library_Catalogue_App
                 {
                     match = false;
                 }
-                if (txtbox_qty.Text != "" && txtbox_qty.Text != dtbooklist.Rows[i]["Quantity"].ToString())
-                {
-                    match = false;
-                }
                 if (match)
                 {
                     dtbooksearched.ImportRow(dtbooklist.Rows[i]);
@@ -268,10 +274,6 @@ namespace Library_Catalogue_App
                 else if (txtbox_year.Text != "")
                 {
                     MessageBox.Show("Book Year doesn't exist or invalid");
-                }
-                else if (txtbox_qty.Text != "" || txtbox_qty.Text == "0")
-                {
-                    MessageBox.Show("Book Quantity is too many or invalid");
                 }
                 else
                 {
@@ -303,17 +305,5 @@ namespace Library_Catalogue_App
 
         }
 
-        private void txtbox_qty_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-            (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            {
-                e.Handled = true;
-            }
-        }
     }
 }

@@ -96,7 +96,7 @@
             this.txtbox_username.Size = new System.Drawing.Size(349, 26);
             this.txtbox_username.TabIndex = 5;
             // 
-            // Form1
+            // Form_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -107,7 +107,7 @@
             this.Controls.Add(this.txtbox_pass);
             this.Controls.Add(this.btn_login);
             this.Controls.Add(this.lbl_Title);
-            this.Name = "Form1";
+            this.Name = "Form_Login";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);

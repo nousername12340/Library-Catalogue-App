@@ -34,6 +34,7 @@
             this.btn_manageusers = new System.Windows.Forms.Button();
             this.btn_manageloans = new System.Windows.Forms.Button();
             this.btn_logout = new System.Windows.Forms.Button();
+            this.btn_lastlogin = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbl_menu
@@ -100,11 +101,22 @@
             this.btn_logout.UseVisualStyleBackColor = true;
             this.btn_logout.Click += new System.EventHandler(this.btn_back_Click);
             // 
+            // btn_lastlogin
+            // 
+            this.btn_lastlogin.Location = new System.Drawing.Point(656, 399);
+            this.btn_lastlogin.Name = "btn_lastlogin";
+            this.btn_lastlogin.Size = new System.Drawing.Size(132, 39);
+            this.btn_lastlogin.TabIndex = 6;
+            this.btn_lastlogin.Text = "Last Login";
+            this.btn_lastlogin.UseVisualStyleBackColor = true;
+            this.btn_lastlogin.Click += new System.EventHandler(this.btn_lastlogin_Click);
+            // 
             // Form_MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btn_lastlogin);
             this.Controls.Add(this.btn_logout);
             this.Controls.Add(this.btn_manageloans);
             this.Controls.Add(this.btn_manageusers);
@@ -127,5 +139,6 @@
         private System.Windows.Forms.Button btn_manageusers;
         private System.Windows.Forms.Button btn_manageloans;
         private System.Windows.Forms.Button btn_logout;
+        private System.Windows.Forms.Button btn_lastlogin;
     }
 }

@@ -28,16 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lbl_catalogue = new System.Windows.Forms.Label();
             this.btn_back = new System.Windows.Forms.Button();
             this.dgv_booklist = new System.Windows.Forms.DataGridView();
             this.lbl_booktitle = new System.Windows.Forms.Label();
             this.lbl_year = new System.Windows.Forms.Label();
             this.lbl_Author = new System.Windows.Forms.Label();
-            this.lbl_qty = new System.Windows.Forms.Label();
             this.btn_search = new System.Windows.Forms.Button();
-            this.txtbox_qty = new System.Windows.Forms.TextBox();
             this.txtbox_year = new System.Windows.Forms.TextBox();
             this.txtbox_author = new System.Windows.Forms.TextBox();
             this.txtbox_title = new System.Windows.Forms.TextBox();
@@ -71,14 +68,6 @@
             this.dgv_booklist.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_booklist.Location = new System.Drawing.Point(287, 87);
             this.dgv_booklist.Name = "dgv_booklist";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_booklist.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv_booklist.RowHeadersWidth = 51;
             this.dgv_booklist.RowTemplate.Height = 24;
             this.dgv_booklist.Size = new System.Drawing.Size(564, 362);
@@ -115,34 +104,16 @@
             this.lbl_Author.TabIndex = 21;
             this.lbl_Author.Text = "Author:";
             // 
-            // lbl_qty
-            // 
-            this.lbl_qty.AutoSize = true;
-            this.lbl_qty.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_qty.Location = new System.Drawing.Point(25, 302);
-            this.lbl_qty.Name = "lbl_qty";
-            this.lbl_qty.Size = new System.Drawing.Size(91, 25);
-            this.lbl_qty.TabIndex = 22;
-            this.lbl_qty.Text = "Quantity:";
-            // 
             // btn_search
             // 
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_search.Location = new System.Drawing.Point(26, 377);
+            this.btn_search.Location = new System.Drawing.Point(26, 306);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(94, 38);
             this.btn_search.TabIndex = 23;
             this.btn_search.Text = "Search";
             this.btn_search.UseVisualStyleBackColor = true;
             this.btn_search.Click += new System.EventHandler(this.btn_search_Click);
-            // 
-            // txtbox_qty
-            // 
-            this.txtbox_qty.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbox_qty.Location = new System.Drawing.Point(26, 330);
-            this.txtbox_qty.Name = "txtbox_qty";
-            this.txtbox_qty.Size = new System.Drawing.Size(217, 24);
-            this.txtbox_qty.TabIndex = 24;
             // 
             // txtbox_year
             // 
@@ -171,7 +142,7 @@
             // btn_clear
             // 
             this.btn_clear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_clear.Location = new System.Drawing.Point(149, 377);
+            this.btn_clear.Location = new System.Drawing.Point(149, 306);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(94, 38);
             this.btn_clear.TabIndex = 32;
@@ -189,9 +160,7 @@
             this.Controls.Add(this.txtbox_title);
             this.Controls.Add(this.txtbox_author);
             this.Controls.Add(this.txtbox_year);
-            this.Controls.Add(this.txtbox_qty);
             this.Controls.Add(this.btn_search);
-            this.Controls.Add(this.lbl_qty);
             this.Controls.Add(this.lbl_Author);
             this.Controls.Add(this.lbl_year);
             this.Controls.Add(this.lbl_booktitle);
@@ -216,9 +185,7 @@
         private System.Windows.Forms.Label lbl_booktitle;
         private System.Windows.Forms.Label lbl_year;
         private System.Windows.Forms.Label lbl_Author;
-        private System.Windows.Forms.Label lbl_qty;
         private System.Windows.Forms.Button btn_search;
-        private System.Windows.Forms.TextBox txtbox_qty;
         private System.Windows.Forms.TextBox txtbox_year;
         private System.Windows.Forms.TextBox txtbox_author;
         private System.Windows.Forms.TextBox txtbox_title;

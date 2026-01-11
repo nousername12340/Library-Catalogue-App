@@ -85,6 +85,7 @@ namespace Library_Catalogue_App
 
             if (loginsuccess == true)
             {
+                UserCheck.loginhistory.Add(txtbox_username.Text);
                 formmainmenu.Show();
                 this.Hide();
 

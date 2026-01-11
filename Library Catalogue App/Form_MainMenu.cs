@@ -27,12 +27,14 @@ namespace Library_Catalogue_App
             {
                 setButtonVisible(false);
             }
+
         }
         public void setButtonVisible(Boolean cek)
         {
             this.btn_managecata.Visible = cek;
             this.btn_manageusers.Visible = cek;
             this.btn_manageloans.Visible = cek;
+            this.btn_lastlogin.Visible = cek;
         }
 
         private void btn_libcata_Click(object sender, EventArgs e)
@@ -68,6 +70,15 @@ namespace Library_Catalogue_App
             Form_ManageLoan manageloans = new Form_ManageLoan();
             manageloans.Show();
             this.Close();
+        }
+
+        private void btn_lastlogin_Click(object sender, EventArgs e)
+        {
+            if (UserCheck.loginhistory.Count > 0)
+            {
+                string logins = string.Join(", ", UserCheck.loginhistory);
+                MessageBox.Show("Logins so far: " + logins);
+            }
         }
     }
 }

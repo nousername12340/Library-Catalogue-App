@@ -21,6 +21,7 @@ namespace Library_Catalogue_App
         string sqlquery;
         string connection;
         DataTable dtloanlist = new DataTable();
+        int SelectedID;
         public Form_ManageLoan()
         {
             InitializeComponent();
@@ -130,18 +131,35 @@ namespace Library_Catalogue_App
                 }
                 int bookId = Convert.ToInt32(bookResult);
 
-                string sqlCheck = "SELECT * FROM details WHERE id_users = " + userId + " AND id_books = " + bookId + " AND returndate IS NULL AND status_del = 'F'";
-                cmd = new MySqlCommand(sqlCheck, conn);
-                reader = cmd.ExecuteReader();
+                string sqlUserCheck = "SELECT COUNT(*) FROM details " +
+                           "WHERE id_users = " + userId +
+                           " AND id_books = " + bookId +
+                           " AND returndate IS NULL " +  // only active loans
+                           " AND status_del = 'F'";
+                cmd = new MySqlCommand(sqlUserCheck, conn);
+                int userCount = Convert.ToInt32(cmd.ExecuteScalar());
 
-                if (reader.HasRows)
+                if (userCount > 0)
                 {
-                    MessageBox.Show("This book is already borrowed by this user and not returned yet!");
-                    reader.Close();
+                    MessageBox.Show("This user already has this book borrowed and has not returned it yet!");
                     conn.Close();
                     return;
                 }
-                reader.Close();
+
+                // 5️⃣ Check if the book is currently borrowed by anyone
+                string sqlBookCheck = "SELECT COUNT(*) FROM details " +
+                                      "WHERE id_books = " + bookId +
+                                      " AND returndate IS NULL " + // only active loans
+                                      " AND status_del = 'F'";
+                cmd = new MySqlCommand(sqlBookCheck, conn);
+                int bookCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (bookCount > 0)
+                {
+                    MessageBox.Show("This book is currently borrowed by someone else and cannot be loaned right now!");
+                    conn.Close();
+                    return;
+                }
 
                 DateTime loanDate = dtp_borrow.Value;
                 DateTime dueDate = loanDate.AddDays(7);
@@ -198,51 +216,121 @@ namespace Library_Catalogue_App
                 MessageBox.Show("Please enter the book title!");
                 return;
             }
-
-
-            try
+            if (conn.State != ConnectionState.Open)
             {
                 conn.Open();
-                int userId = Convert.ToInt32(dgv_loanlist.CurrentRow.Cells["id_users"].Value);
-                int bookId = Convert.ToInt32(dgv_loanlist.CurrentRow.Cells["id_books"].Value);
-
-                DateTime loanDate = dtp_borrow.Value;
-                DateTime dueDate = loanDate.AddDays(7);
-
-                string sqlUpdate;
-
-                if (dtp_return.Checked) 
-                {
-                    DateTime returnDate = dtp_return.Value;
-                    sqlUpdate = "UPDATE details SET " +
-                                "loandate = '" + loanDate.ToString("yyyy-MM-dd") + "', " +
-                                "duedate = '" + dueDate.ToString("yyyy-MM-dd") + "', " +
-                                "returndate = '" + returnDate.ToString("yyyy-MM-dd") + "' " +
-                                "WHERE id_users = " + userId + " AND id_books = " + bookId;
-                }
-                else 
-                {
-                    sqlUpdate = "UPDATE details SET " +
-                                "loandate = '" + loanDate.ToString("yyyy-MM-dd") + "', " +
-                                "duedate = '" + dueDate.ToString("yyyy-MM-dd") + "', " +
-                                "returndate = NULL " +
-                                "WHERE id_users = " + userId + " AND id_books = " + bookId;
-                }
-
-                cmd = new MySqlCommand(sqlUpdate, conn);
-                cmd.ExecuteNonQuery();
-
-                MessageBox.Show("Loan record updated successfully!");
-                conn.Close();
-
-                GetDataFromSQL();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
-                if (conn.State == ConnectionState.Open)
-                    conn.Close();
+                conn.Close();
             }
+
+            string sqlUser = "SELECT id_users FROM Users WHERE username = '" + txtbox_username.Text + "' AND status_del = 'F'";
+            cmd = new MySqlCommand(sqlUser, conn);
+            object userResult = cmd.ExecuteScalar();
+
+            if (userResult == null)
+            {
+                MessageBox.Show("User not found!");
+                conn.Close();
+                return;
+            }
+            int newUserId = Convert.ToInt32(userResult);
+
+            string sqlBook = "SELECT id_books FROM Books WHERE booktitle = '" + txtbox_title.Text + "' AND status_del = 'F'";
+            cmd = new MySqlCommand(sqlBook, conn);
+            object bookResult = cmd.ExecuteScalar();
+
+            if (bookResult == null)
+            {
+                MessageBox.Show("Book not found!");
+                conn.Close();
+                return;
+            }
+            int newBookId = Convert.ToInt32(bookResult);
+
+            foreach (DataGridViewRow row in dgv_loanlist.Rows)
+            {
+                if (row.IsNewRow) continue;
+                if (row.Index == dgv_loanlist.CurrentRow.Index) continue;
+
+                string existingUsername = "";
+                string existingBook = "";
+
+                if (row.Cells["Username"].Value != null)
+                    existingUsername = row.Cells["Username"].Value.ToString();
+
+                if (row.Cells["Book Title"].Value != null)
+                    existingBook = row.Cells["Book Title"].Value.ToString();
+
+                string newUsername = txtbox_username.Text.Trim();
+                string newBookTitle = txtbox_title.Text.Trim();
+                if (existingUsername == newUsername && existingBook == newBookTitle)
+                {
+                    MessageBox.Show("This user already has this book in the loan list. Cannot update.");
+                    return;
+                }
+            }
+                int oldUserId = Convert.ToInt32(dgv_loanlist.CurrentRow.Cells["id_users"].Value);
+                int oldBookId = Convert.ToInt32(dgv_loanlist.CurrentRow.Cells["id_books"].Value);
+
+                conn.Close();
+                try
+                {
+                    conn.Open();
+
+                    if (conn.State != ConnectionState.Open)
+                    {
+                        MessageBox.Show("Database connection could not be opened!");
+                        return;
+                    }
+
+                    DateTime loanDate = dtp_borrow.Value;
+                    DateTime dueDate = loanDate.AddDays(7);
+
+                    string sqlUpdate;
+
+                    if (dtp_return.Checked)
+                    {
+                        DateTime returnDate = dtp_return.Value;
+                        sqlUpdate = "UPDATE details SET " +
+                                    "id_users = " + newUserId + ", " +
+                                    "id_books = " + newBookId + ", " +
+                                    "loandate = '" + loanDate.ToString("yyyy-MM-dd") + "', " +
+                                    "duedate = '" + dueDate.ToString("yyyy-MM-dd") + "', " +
+                                    "returndate = '" + returnDate.ToString("yyyy-MM-dd") + "' " +
+                                    "WHERE id_users = " + oldUserId + " AND id_books = " + oldBookId;
+                    }
+                    else
+                    {
+                        sqlUpdate = "UPDATE details SET " +
+                                    "id_users = " + newUserId + ", " +
+                                    "id_books = " + newBookId + ", " +
+                                    "loandate = '" + loanDate.ToString("yyyy-MM-dd") + "', " +
+                                    "duedate = '" + dueDate.ToString("yyyy-MM-dd") + "', " +
+                                    "returndate = NULL " +
+                                    "WHERE id_users = " + oldUserId + " AND id_books = " + oldBookId;
+                    }
+
+
+                    cmd = new MySqlCommand(sqlUpdate, conn);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                    MessageBox.Show("Loan record updated successfully!");
+                    dtloanlist.Clear();
+                    GetDataFromSQL();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    if (conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
+                }
         }
 
         private void btn_del_Click(object sender, EventArgs e)
@@ -370,22 +458,60 @@ namespace Library_Catalogue_App
 
         private void dgv_loanlist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.RowIndex >= 0)
+            if (e.RowIndex < 0)
             {
-                txtbox_username.Text = dgv_loanlist.Rows[e.RowIndex].Cells["Username"].Value.ToString();
-                txtbox_title.Text = dgv_loanlist.Rows[e.RowIndex].Cells["Book Title"].Value.ToString();
-                object borrowValue = dgv_loanlist.Rows[e.RowIndex].Cells["Date Borrowed"].Value;
+                return;
+            }
+
+            DataGridViewRow row = dgv_loanlist.Rows[e.RowIndex];
+
+            object idValue = row.Cells["id_users"].Value;
+
+            if (idValue == null || idValue == DBNull.Value || idValue.ToString().Trim() == "")
+            {
+                MessageBox.Show("This user does not have a valid ID. Cannot continue.");
+                SelectedID = 0;
+                return;
+            }
+
+            SelectedID = Convert.ToInt32(idValue);
+            if (row.Cells["Username"].Value != null && row.Cells["Username"].Value != DBNull.Value)
+            {
+                txtbox_username.Text = row.Cells["Username"].Value.ToString();
+            }
+            else
+            {
+                txtbox_username.Text = "";
+            }
+
+            if (row.Cells["Book Title"].Value != null && row.Cells["Book Title"].Value != DBNull.Value)
+            {
+                txtbox_title.Text = row.Cells["Book Title"].Value.ToString();
+            }
+            else
+            {
+                txtbox_title.Text = "";
+            }
+
+            object borrowValue = row.Cells["Date Borrowed"].Value;
+            if (borrowValue != null && borrowValue != DBNull.Value)
+            {
                 dtp_borrow.Value = Convert.ToDateTime(borrowValue);
-                object returnValue = dgv_loanlist.Rows[e.RowIndex].Cells["Return Date"].Value;
-                if (returnValue != DBNull.Value)
-                {
-                    dtp_return.Value = Convert.ToDateTime(returnValue);
-                    dtp_return.Checked = true;
-                }
-                else
-                {
-                    dtp_return.Checked = false; 
-                }
+            }
+            else
+            {
+                dtp_borrow.Value = DateTime.Now;
+            }
+
+            object returnValue = row.Cells["Return Date"].Value;
+            if (returnValue != null && returnValue != DBNull.Value)
+            {
+                dtp_return.Value = Convert.ToDateTime(returnValue);
+                dtp_return.Checked = true;
+            }
+            else
+            {
+                dtp_return.Checked = false;
             }
         }
     }

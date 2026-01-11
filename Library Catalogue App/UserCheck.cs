@@ -9,5 +9,6 @@ namespace Library_Catalogue_App
     public class UserCheck
     {
         public static bool IsStaff = false;
+        public static List<string> loginhistory = new List<string>();
     }
 }

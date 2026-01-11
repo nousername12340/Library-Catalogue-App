@@ -33,9 +33,7 @@
             this.lbl_booktitle = new System.Windows.Forms.Label();
             this.lbl_year = new System.Windows.Forms.Label();
             this.lbl_Author = new System.Windows.Forms.Label();
-            this.lbl_qty = new System.Windows.Forms.Label();
             this.btn_search = new System.Windows.Forms.Button();
-            this.txtbox_qty = new System.Windows.Forms.TextBox();
             this.txtbox_year = new System.Windows.Forms.TextBox();
             this.txtbox_author = new System.Windows.Forms.TextBox();
             this.txtbox_title = new System.Windows.Forms.TextBox();
@@ -99,36 +97,16 @@
             this.lbl_Author.TabIndex = 4;
             this.lbl_Author.Text = "Author:";
             // 
-            // lbl_qty
-            // 
-            this.lbl_qty.AutoSize = true;
-            this.lbl_qty.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_qty.Location = new System.Drawing.Point(16, 293);
-            this.lbl_qty.Name = "lbl_qty";
-            this.lbl_qty.Size = new System.Drawing.Size(91, 25);
-            this.lbl_qty.TabIndex = 5;
-            this.lbl_qty.Text = "Quantity:";
-            // 
             // btn_search
             // 
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_search.Location = new System.Drawing.Point(133, 384);
+            this.btn_search.Location = new System.Drawing.Point(122, 334);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(88, 29);
             this.btn_search.TabIndex = 8;
             this.btn_search.Text = "Search";
             this.btn_search.UseVisualStyleBackColor = true;
             this.btn_search.Click += new System.EventHandler(this.btn_search_Click);
-            // 
-            // txtbox_qty
-            // 
-            this.txtbox_qty.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbox_qty.Location = new System.Drawing.Point(17, 321);
-            this.txtbox_qty.Name = "txtbox_qty";
-            this.txtbox_qty.Size = new System.Drawing.Size(217, 24);
-            this.txtbox_qty.TabIndex = 9;
-            this.txtbox_qty.TextChanged += new System.EventHandler(this.txtbox_qty_TextChanged);
-            this.txtbox_qty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtbox_qty_KeyPress);
             // 
             // txtbox_year
             // 
@@ -159,7 +137,7 @@
             // btn_add
             // 
             this.btn_add.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_add.Location = new System.Drawing.Point(37, 365);
+            this.btn_add.Location = new System.Drawing.Point(26, 315);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(86, 29);
             this.btn_add.TabIndex = 13;
@@ -170,7 +148,7 @@
             // btn_del
             // 
             this.btn_del.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_del.Location = new System.Drawing.Point(37, 435);
+            this.btn_del.Location = new System.Drawing.Point(26, 385);
             this.btn_del.Name = "btn_del";
             this.btn_del.Size = new System.Drawing.Size(86, 29);
             this.btn_del.TabIndex = 14;
@@ -181,7 +159,7 @@
             // btn_update
             // 
             this.btn_update.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_update.Location = new System.Drawing.Point(37, 400);
+            this.btn_update.Location = new System.Drawing.Point(26, 350);
             this.btn_update.Name = "btn_update";
             this.btn_update.Size = new System.Drawing.Size(86, 29);
             this.btn_update.TabIndex = 15;
@@ -202,7 +180,7 @@
             // btn_clear
             // 
             this.btn_clear.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_clear.Location = new System.Drawing.Point(133, 419);
+            this.btn_clear.Location = new System.Drawing.Point(122, 369);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(88, 29);
             this.btn_clear.TabIndex = 21;
@@ -223,9 +201,7 @@
             this.Controls.Add(this.txtbox_title);
             this.Controls.Add(this.txtbox_author);
             this.Controls.Add(this.txtbox_year);
-            this.Controls.Add(this.txtbox_qty);
             this.Controls.Add(this.btn_search);
-            this.Controls.Add(this.lbl_qty);
             this.Controls.Add(this.lbl_Author);
             this.Controls.Add(this.lbl_year);
             this.Controls.Add(this.lbl_booktitle);
@@ -247,9 +223,7 @@
         private System.Windows.Forms.Label lbl_booktitle;
         private System.Windows.Forms.Label lbl_year;
         private System.Windows.Forms.Label lbl_Author;
-        private System.Windows.Forms.Label lbl_qty;
         private System.Windows.Forms.Button btn_search;
-        private System.Windows.Forms.TextBox txtbox_qty;
         private System.Windows.Forms.TextBox txtbox_year;
         private System.Windows.Forms.TextBox txtbox_author;
         private System.Windows.Forms.TextBox txtbox_title;

@@ -45,7 +45,7 @@ namespace Library_Catalogue_App
                 conn.Open();
 
                 connectionstring = "server=localhost;user=root;database=db_LibraryCatalogueApp;password=;";
-                sqlquery = "select id_books, booktitle as 'Title' , bookauthors as 'Author', bookyear as 'Year', book_qty as 'Quantity' from `Books` where status_del = 'F'";
+                sqlquery = "select id_books, booktitle as 'Title' , bookauthors as 'Author', bookyear as 'Year' from `Books` where status_del = 'F'";
                 cmd = new MySqlCommand(sqlquery, conn);
 
                 adapter = new MySqlDataAdapter(cmd);
@@ -94,10 +94,6 @@ namespace Library_Catalogue_App
                 {
                     match = false;
                 }
-                if (txtbox_qty.Text != "" && txtbox_qty.Text != dtbooklist.Rows[i]["Quantity"].ToString())
-                {
-                    match = false;
-                }
                 if (match)
                 {
                     dtbooksearched.ImportRow(dtbooklist.Rows[i]);
@@ -122,10 +118,6 @@ namespace Library_Catalogue_App
                 {
                     MessageBox.Show("Book Year doesn't exist or invalid");
                 }
-                else if (txtbox_qty.Text != "" || txtbox_qty.Text == "0")
-                {
-                    MessageBox.Show("Book Quantity is too many or invalid");
-                }
                 else
                 {
                     MessageBox.Show("Please enter a value");
@@ -140,7 +132,6 @@ namespace Library_Catalogue_App
                 txtbox_title.Text = dgv_booklist.Rows[e.RowIndex].Cells["Title"].Value.ToString();
                 txtbox_author.Text = dgv_booklist.Rows[e.RowIndex].Cells["Author"].Value.ToString();
                 txtbox_year.Text = dgv_booklist.Rows[e.RowIndex].Cells["Year"].Value.ToString();
-                txtbox_qty.Text = dgv_booklist.Rows[e.RowIndex].Cells["Quantity"].Value.ToString();
             }
         }
 
@@ -150,7 +141,6 @@ namespace Library_Catalogue_App
             txtbox_title.ResetText();
             txtbox_author.ResetText();
             txtbox_year.ResetText();
-            txtbox_qty.ResetText();
             GetDataFromSQL();
         }
     }
