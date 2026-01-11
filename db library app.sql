@@ -17,6 +17,7 @@ create table if not exists `Books` (
 	booktitle text not null,
     bookauthors text not null,
     bookyear int not null,
+	book_qty int not null,
 	status_del varchar(1) default 'F'
 );
 
@@ -44,22 +45,22 @@ insert into `Users` (username, passwords, user_role) values
 ('Karen', 'karenstaff', 'Staff'),
 ('Leo', 'stafftheleo', 'Staff');
 
-insert into `Books` (booktitle, bookauthors, bookyear) values
-('1984', 'George Orwell', 1984),
-('Brave New World', 'Aldous Huxley', 1932),
-('Harry Potter', 'JK Rowling', 1997),
-('Crime and Punishment', 'Fyodor Dostoevsky', 1866),
-('Glencoe World Geography', 'Richard G. Boehm', 1994),
-("Charlotte's Web", 'E. B. White', 1952),
-('The Great Gatsby', 'F. Scott Fitzgerald', 1925),
-('To Kill a Mockingbird', 'Harper Lee', 1960),
-('The Hobbit', 'J.R.R. Tolkien', 1937),
-('Pride and Prejudice', 'Jane Austen', 1813),
-('The Catcher in the Rye', 'J.D. Salinger', 1951),
-('1984 Revisited', 'John Keller', 2020),
-('Modern Physics', 'Alice Johnson', 2010),
-('The Mystery of the Lost City', 'Lara Winters', 2018),
-('Gardening for Beginners', 'Mark Thompson', 2015);
+insert into `Books` (booktitle, bookauthors, bookyear, book_qty) values
+('1984', 'George Orwell', 1984, 2),
+('Brave New World', 'Aldous Huxley', 1932, 1),
+('Harry Potter', 'JK Rowling', 1997, 5),
+('Crime and Punishment', 'Fyodor Dostoevsky', 1866, 3),
+('Glencoe World Geography', 'Richard G. Boehm', 1994, 2),
+("Charlotte's Web", 'E. B. White', 1952, 4),
+('The Great Gatsby', 'F. Scott Fitzgerald', 1925, 3),
+('To Kill a Mockingbird', 'Harper Lee', 1960, 4),
+('The Hobbit', 'J.R.R. Tolkien', 1937, 6),
+('Pride and Prejudice', 'Jane Austen', 1813, 5),
+('The Catcher in the Rye', 'J.D. Salinger', 1951, 3),
+('1984 Revisited', 'John Keller', 2020, 2),
+('Modern Physics', 'Alice Johnson', 2010, 1),
+('The Mystery of the Lost City', 'Lara Winters', 2018, 2),
+('Gardening for Beginners', 'Mark Thompson', 2015, 3);
 
 INSERT INTO details (id_users, id_books, loandate, duedate, returndate) VALUES
 (4, 3, '2025-12-30', '2026-01-06', '2026-01-05'),
