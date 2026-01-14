@@ -19,7 +19,7 @@ namespace Library_Catalogue_App
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            if (UserCheck.IsStaff == true)
+            if (UserCheck.IsStaff == true)      //check if user is staff or not using the public field from class UserCheck
             {
                 setButtonVisible(true);
             }
@@ -76,7 +76,7 @@ namespace Library_Catalogue_App
         {
             if (UserCheck.loginhistory.Count > 0)
             {
-                string logins = string.Join(", ", UserCheck.loginhistory);
+                string logins = string.Join(", ", UserCheck.loginhistory);      //to see who just login
                 MessageBox.Show("Logins so far: " + logins);
             }
         }

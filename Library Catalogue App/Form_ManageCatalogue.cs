@@ -22,7 +22,7 @@ namespace Library_Catalogue_App
         string sqlquery;
         string connection;
         DataTable dtbooklist = new DataTable();
-        int selectedid = -1;
+        int selectedid = -1; //to get id/row number from datagridview
 
         public Form_ManageCatalogue()
         {
@@ -137,7 +137,7 @@ namespace Library_Catalogue_App
 
         private void dgv_booklist_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
+            if (e.RowIndex < 0)     
             {
                 return;
             }
@@ -163,9 +163,9 @@ namespace Library_Catalogue_App
             try
             {
                 conn.Close();
-                if (selectedid == -1)
-                    {
-                        MessageBox.Show("Please select a user to update!");
+                if (selectedid == -1)   //to get id/row number from datagridview if selectedid is -1 then cell isn't clicked yet
+                {
+                        MessageBox.Show("Please select a book to update!");
                         return;
                     }
 
@@ -205,7 +205,7 @@ namespace Library_Catalogue_App
             {
                 if (selectedid == -1)
                 {
-                    MessageBox.Show("Please select a user to delete!");
+                    MessageBox.Show("Please select a book to delete!");
                     return;
                 }
 
@@ -289,7 +289,7 @@ namespace Library_Catalogue_App
 
         private void txtbox_year_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&   //number only validation
             (e.KeyChar != '.'))
             {
                 e.Handled = true;

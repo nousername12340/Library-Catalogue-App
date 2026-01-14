@@ -8,7 +8,7 @@ namespace Library_Catalogue_App
 {
     public class UserCheck
     {
-        public static bool IsStaff = false;
-        public static List<string> loginhistory = new List<string>();
+        public static bool IsStaff = false;                                 //public field bool so other classes can access
+        public static List<string> loginhistory = new List<string>();       //public field list so other classes can access
     }
 }

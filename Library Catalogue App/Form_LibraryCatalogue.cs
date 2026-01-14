@@ -94,7 +94,7 @@ namespace Library_Catalogue_App
                 {
                     match = false;
                 }
-                if (match)
+                if (match == true)
                 {
                     dtbooksearched.ImportRow(dtbooklist.Rows[i]);
                     bookexist = true;
@@ -129,9 +129,9 @@ namespace Library_Catalogue_App
         {
             if (e.RowIndex >= 0)
             {
-                txtbox_title.Text = dgv_booklist.Rows[e.RowIndex].Cells["Title"].Value.ToString();
-                txtbox_author.Text = dgv_booklist.Rows[e.RowIndex].Cells["Author"].Value.ToString();
-                txtbox_year.Text = dgv_booklist.Rows[e.RowIndex].Cells["Year"].Value.ToString();
+                txtbox_title.Text = dgv_booklist.Rows[e.RowIndex].Cells["Title"].Value.ToString();      //if cell is clicked
+                txtbox_author.Text = dgv_booklist.Rows[e.RowIndex].Cells["Author"].Value.ToString();    //autofill the textboxes
+                txtbox_year.Text = dgv_booklist.Rows[e.RowIndex].Cells["Year"].Value.ToString();        //for better view/read
             }
         }
 

@@ -114,6 +114,7 @@
             this.dtp_borrow.Name = "dtp_borrow";
             this.dtp_borrow.Size = new System.Drawing.Size(200, 22);
             this.dtp_borrow.TabIndex = 30;
+            this.dtp_borrow.ValueChanged += new System.EventHandler(this.dtp_borrow_ValueChanged);
             // 
             // btn_update
             // 

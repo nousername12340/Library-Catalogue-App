@@ -38,30 +38,25 @@ namespace Library_Catalogue_App
         private void GetDataFromSQL()
         {
 
+            string sql = "SELECT d.id_users, d.id_books, b.booktitle AS 'Book Title', u.username AS 'Username', " +
+                        "d.loandate AS 'Date Borrowed', d.duedate AS 'Due Date', d.returndate AS 'Return Date' " +
+                        "FROM `details` d " +
+                        "INNER JOIN `Users` u ON d.id_users = u.id_users " +
+                        "INNER JOIN `Books` b ON d.id_books = b.id_books " +
+                        "WHERE d.status_del = 'F' AND u.status_del = 'F' AND b.status_del = 'F'";    //use inner join to get booktitle and username using ids
             try
             {
-                dtloanlist.Clear();
-                conn.Open();
-
-                string sql = "SELECT d.id_users, d.id_books, b.booktitle AS 'Book Title', u.username AS 'Username', " +
-                            "d.loandate AS 'Date Borrowed', d.duedate AS 'Due Date', d.returndate AS 'Return Date' " +
-                            "FROM `details` d " +
-                            "INNER JOIN `Users` u ON d.id_users = u.id_users " +
-                            "INNER JOIN `Books` b ON d.id_books = b.id_books " +
-                            "WHERE d.status_del = 'F' AND u.status_del = 'F' AND b.status_del = 'F'";
-                cmd = new MySqlCommand(sql, conn);
-                adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dtloanlist);
+                using (MySqlConnection conn = new MySqlConnection(connection))
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(sql, conn))
+                {
+                    adapter.Fill(dtloanlist);
+                }
 
                 dgv_loanlist.DataSource = dtloanlist;
-
-                conn.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                if (conn.State == ConnectionState.Open)
-                    conn.Close();
             }
         }
         private void lbl_booktitle_Click(object sender, EventArgs e)
@@ -87,6 +82,8 @@ namespace Library_Catalogue_App
 
             if (dgv_loanlist.Columns["id_books"] != null)
                 dgv_loanlist.Columns["id_books"].Visible = false;
+
+            dtp_borrow.MinDate = DateTime.Now;
         }
 
         private void btn_add_Click(object sender, EventArgs e)
@@ -102,9 +99,9 @@ namespace Library_Catalogue_App
                 MessageBox.Show("Please enter the book title!");
                 return;
             }
-
-            try
-            {
+            
+                try
+                {
                 conn.Open();
 
                 string sqlUser = "SELECT id_users FROM Users WHERE username = '" + txtbox_username.Text + "' AND status_del = 'F'";
@@ -146,7 +143,7 @@ namespace Library_Catalogue_App
                     return;
                 }
 
-                // 5️⃣ Check if the book is currently borrowed by anyone
+                //Check if the book is currently borrowed by anyone
                 string sqlBookCheck = "SELECT COUNT(*) FROM details " +
                                       "WHERE id_books = " + bookId +
                                       " AND returndate IS NULL " + // only active loans
@@ -163,6 +160,7 @@ namespace Library_Catalogue_App
 
                 DateTime loanDate = dtp_borrow.Value;
                 DateTime dueDate = loanDate.AddDays(7);
+                
                 string sqlInsert;
 
                 if (dtp_return.Checked)
@@ -188,14 +186,15 @@ namespace Library_Catalogue_App
 
                 MessageBox.Show("Loan recorded successfully! Due date: " + dueDate.ToShortDateString());
                 conn.Close();
+                dtloanlist.Clear();
                 GetDataFromSQL();
-            }
-            catch (Exception ex)
-            {
+                }
+                catch (Exception ex)
+                {
                 MessageBox.Show(ex.Message);
                 if (conn.State == ConnectionState.Open)
                     conn.Close();
-            }
+                }
         }
 
         private void dtp_return_ValueChanged(object sender, EventArgs e)
@@ -376,7 +375,7 @@ namespace Library_Catalogue_App
 
                 MessageBox.Show("Loan record deleted successfully!");
                 conn.Close();
-
+                dtloanlist.Clear();
                 GetDataFromSQL();
             }
             catch (Exception ex)
@@ -496,12 +495,25 @@ namespace Library_Catalogue_App
             object borrowValue = row.Cells["Date Borrowed"].Value;
             if (borrowValue != null && borrowValue != DBNull.Value)
             {
-                dtp_borrow.Value = Convert.ToDateTime(borrowValue);
+                DateTime borrowDate = Convert.ToDateTime(borrowValue);
+
+                if (borrowDate < DateTime.Now)      //if cell is clicked with borrowing date that already passed then the datetimpicker will follow the value of the date
+                {
+                    dtp_borrow.MinDate = borrowDate;
+                }
+                else
+                {
+                    dtp_borrow.MinDate = DateTime.Now;
+                }
+
+                dtp_borrow.Value = borrowDate;
             }
             else
             {
-                dtp_borrow.Value = DateTime.Now;
+                dtp_borrow.MinDate = DateTime.Today;
+                dtp_borrow.Value = DateTime.Today;
             }
+
 
             object returnValue = row.Cells["Return Date"].Value;
             if (returnValue != null && returnValue != DBNull.Value)
@@ -513,6 +525,11 @@ namespace Library_Catalogue_App
             {
                 dtp_return.Checked = false;
             }
+        }
+
+        private void dtp_borrow_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
