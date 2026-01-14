@@ -62,7 +62,8 @@ Windows Forms App (.NET Framework)
 
 ## Database
 ### ERD
-![ERD Library](https://github.com/user-attachments/assets/19fab8be-74ff-43e3-b383-f23ddb7c5656)
+![ERD library 2](https://github.com/user-attachments/assets/1d30d27e-46f3-4934-bd44-3113c3ed807d)
+
 
 ### Entities
 Users: Stores both Staffs and Members.
